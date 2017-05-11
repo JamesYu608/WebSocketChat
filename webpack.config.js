@@ -7,6 +7,15 @@ const config = {
     path: path.resolve(__dirname, 'client/build'),
     filename: 'bundle.js'
   },
+  module: {
+    rules: [
+      {
+        use: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/
+      }
+    ]
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: './client/src/index.html'
