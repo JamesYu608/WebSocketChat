@@ -1,0 +1,11 @@
+{
+  "name": "zpush-backend-analyzer",
+  "version": "1.0.0",
+  "description": "For backend data debugging",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "james_yu@asus.com",
+  "license": "ISC"
+}
