@@ -2,11 +2,12 @@
   "name": "zpush-backend-analyzer",
   "version": "1.0.0",
   "description": "For backend data debugging",
-  "main": "app.js",
+  "main": "server/entry.js",
   "scripts": {
+    "start": "node ./server/entry.js",
     "clean": "rimraf ./client/build",
-    "build": "npm run clean && webpack",
-    "dev": "webpack-dev-server --port 8050",
+    "build": "npm run clean && webpack -p",
+    "prod": "NODE_ENV=production node ./server/entry.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "james_yu@asus.com",
@@ -23,9 +24,10 @@
     "standard": "^10.0.2",
     "style-loader": "^0.17.0",
     "webpack": "^2.5.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-middleware": "^1.10.2"
   },
   "dependencies": {
+    "express": "^4.15.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
