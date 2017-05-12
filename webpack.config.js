@@ -13,6 +13,10 @@ const config = {
         use: 'babel-loader',
         test: /\.js$/,
         exclude: /node_modules/
+      },
+      {
+        use: ['style-loader', 'css-loader'],
+        test: /\.css$/
       }
     ]
   },
