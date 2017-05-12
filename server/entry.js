@@ -1,9 +1,17 @@
 const express = require('express')
+const morgan = require('morgan')
+const bodyParser = require('body-parser')
 const path = require('path')
 
 const app = express()
 
-// Server routing here...
+const apiRouter = require('./routes/api')
+
+app.use(morgan('combined'))
+app.use(bodyParser.json())
+
+// Server routing
+app.use('/api', apiRouter)
 
 if (process.env.NODE_ENV !== 'production') {
   const webpackMiddleware = require('webpack-dev-middleware')
