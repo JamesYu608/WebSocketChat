@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rimraf ./client/build",
     "build": "npm run clean && webpack",
+    "dev": "webpack-dev-server --port 8050",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "james_yu@asus.com",
@@ -21,7 +22,8 @@
     "rimraf": "^2.6.1",
     "standard": "^10.0.2",
     "style-loader": "^0.17.0",
-    "webpack": "^2.5.1"
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
     "react": "^15.5.4",
