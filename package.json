@@ -7,7 +7,7 @@
     "start": "node ./server/entry.js",
     "clean": "rimraf ./client/build",
     "build": "npm run clean && webpack -p",
-    "prod": "NODE_ENV=production node ./server/entry.js",
+    "prod": "cross-env NODE_ENV=production node ./server/entry.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "james_yu@asus.com",
@@ -17,6 +17,7 @@
     "babel-loader": "^7.0.0",
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.24.1",
+    "cross-env": "^5.0.0",
     "css-loader": "^0.28.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^2.28.0",
