@@ -66,3 +66,4 @@ typings/
 .env
 
 client/build/
+server/secure/
