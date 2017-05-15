@@ -9,8 +9,9 @@
     "build": "npm run clean && webpack -p",
     "prod": "cross-env NODE_ENV=production node ./server/entry.js",
     "test": "mocha --compilers js:babel-core/register --recursive",
-    "test:watch-client": "npm run test -- ./client/test --watch",
-    "test:watch-server": "npm run test -- ./server/test --watch"
+    "test:server": "npm run test -- ./server/test",
+    "test:client": "npm run test -- ./client/test",
+    "test:client-watch": "npm run test:client -- --watch"
   },
   "author": "james_yu@asus.com",
   "license": "ISC",
