@@ -46,7 +46,6 @@
     "react-router": "^4.1.1",
     "redux": "^3.6.0",
     "redux-form": "^6.7.0",
-    "request": "^2.81.0",
-    "tedious": "^2.0.0"
+    "request": "^2.81.0"
   }
 }
