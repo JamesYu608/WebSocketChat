@@ -4,7 +4,7 @@
   "description": "For backend data debugging",
   "main": "server/entry.js",
   "scripts": {
-    "start": "node ./server/entry.js",
+    "start": "nodemon --ignore client/ --ignore server/test/ ./server/entry.js",
     "clean": "rimraf ./client/build",
     "build": "npm run clean && webpack -p",
     "prod": "cross-env NODE_ENV=production node ./server/entry.js",
@@ -26,6 +26,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^2.28.0",
     "mocha": "^3.3.0",
+    "nodemon": "^1.11.0",
     "react-test-renderer": "^15.5.4",
     "rimraf": "^2.6.1",
     "sinon": "^2.2.0",
