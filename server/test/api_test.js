@@ -1,14 +1,14 @@
 import React from 'react'
 import { expect } from 'chai'
-import request from 'request'
+import axios from 'axios'
 
 describe('api', () => {
   it('/', (done) => {
-    request('http://localhost:8050/api', (err, response, body) => {
-      if (err) done(err)
-
-      expect(JSON.parse(body).greeting).to.equal('hello, world!')
-      done()
-    })
+    axios.get('http://localhost:8050/api')
+      .then(res => {
+        expect(res.data.greeting).to.equal('hello, world!')
+        done()
+      })
+      .catch(err => done(err))
   })
 })
