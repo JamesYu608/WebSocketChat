@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const VENDOR_LIBS = [
   'react', 'react-dom', 'react-redux',
-  'react-router', 'redux', 'redux-form',
+  'react-router-dom', 'redux', 'redux-form',
   'axios'
 ]
 
