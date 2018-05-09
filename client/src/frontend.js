@@ -1,22 +1,124 @@
-// if user is running mozilla then use it's built-in WebSocket
-const WebSocket = window.WebSocket || window.MozWebSocket
+$(function () {
+  // for better performance - to avoid searching in DOM
+  const content = $('#content')
+  const input = $('#input')
+  const status = $('#status')
+  // my color assigned by the server
+  let myColor = false
+  // my name sent to the server
+  let myName = false
 
-const connection = new WebSocket('ws://localhost:8050')
+  // if user is running mozilla then use it's built-in WebSocket
+  const WebSocket = window.WebSocket || window.MozWebSocket
 
-connection.onopen = function () {
-  // connection is opened and ready to use
-}
-
-connection.onerror = function (error) {
-  // an error occurred when sending/receiving data
-}
-
-connection.onmessage = function (message) {
-  // try to decode json (assume that each message from server is json)
-  try {
-    const json = JSON.parse(message.data)
-  } catch (e) {
-    console.log('This doesn\'t look like a valid JSON: ', message.data)
+  // if browser doesn't support WebSocket, just show
+  // some notification and exit
+  if (!window.WebSocket) {
+    content.html($('<p>',
+      {text: 'Sorry, but your browser doesn\'t support WebSocket.'}
+    ))
+    input.hide()
+    $('span').hide()
+    return
   }
-  // handle incoming message
-}
+
+  const connection = new WebSocket('ws://localhost:8050')
+
+  connection.onopen = () => {
+    // connection is opened and ready to use
+    // first we want users to enter their names
+    input.removeAttr('disabled')
+    status.text('Choose name:')
+  }
+
+  connection.onerror = error => {
+    // an error occurred when sending/receiving data
+    // just in there were some problems with connection...
+    content.html($('<p>', {
+      text: 'Sorry, but there\'s some problem with your connection or the server is down.'
+    }))
+  }
+
+  // most important part - incoming messages
+  connection.onmessage = message => {
+    // try to parse JSON message. Because we know that the server
+    // always returns JSON this should work without any problem but
+    // we should make sure that the message is not chunked or
+    // otherwise damaged.
+    let json
+    try {
+      json = JSON.parse(message.data)
+    } catch (e) {
+      console.log('Invalid JSON: ', message.data)
+      return
+    }
+    // NOTE: if you're not sure about the JSON structure
+    // check the server source code above
+    // first response from the server with user's color
+    if (json.type === 'color') {
+      myColor = json.data
+      status.text(myName + ': ').css('color', myColor)
+      input.removeAttr('disabled').focus()
+      // from now user can start sending messages
+    } else if (json.type === 'history') { // entire message history
+      // insert every single message to the chat window
+      for (let i = 0; i < json.data.length; i++) {
+        addMessage(json.data[i].author, json.data[i].text,
+          json.data[i].color, new Date(json.data[i].time))
+      }
+    } else if (json.type === 'message') { // it's a single message
+      // let the user write another message
+      input.removeAttr('disabled')
+      addMessage(json.data.author, json.data.text,
+        json.data.color, new Date(json.data.time))
+    } else {
+      console.log('Hmm..., I\'ve never seen JSON like this:', json)
+    }
+  }
+
+  /**
+   * Send message when user presses Enter key
+   */
+  input.keydown(function (event) {
+    if (event.keyCode === 13) {
+      const msg = $(this).val()
+      if (!msg) {
+        return
+      }
+      // send the message as an ordinary text
+      connection.send(msg)
+      $(this).val('')
+      // disable the input field to make the user wait until server
+      // sends back response
+      input.attr('disabled', 'disabled')
+      // we know that the first message sent from a user their name
+      if (myName === false) {
+        myName = msg
+      }
+    }
+  })
+
+  /**
+   * This method is optional. If the server wasn't able to
+   * respond to the in 3 seconds then show some error message
+   * to notify the user that something is wrong.
+   */
+  setInterval(() => {
+    if (connection.readyState !== 1) {
+      status.text('Error')
+      input.attr('disabled', 'disabled').val('Unable to communicate with the WebSocket server.')
+    }
+  }, 3000)
+
+  /**
+   * Add message to the chat window
+   */
+  function addMessage (author, message, color, dt) {
+    let [hours, minutes] = [dt.getHours(), dt.getMinutes()]
+    hours = hours < 10 ? '0' + hours : hours
+    minutes = minutes < 10 ? '0' + minutes : minutes
+    const timestamp = `${hours}:${minutes}`
+    const messageHtml = `<p><span style='color:${color}'>${author}</span>@ ${timestamp}: ${message}</p>`
+    content.prepend(messageHtml)
+  }
+})
